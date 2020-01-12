@@ -1,0 +1,183 @@
+<html>
+  <head>
+    <title>Duel Links Packs Estimator</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/colors.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <style>
+    @media screen and (orientation: portrait){
+      .container {
+        width: 100% !important;
+      }
+    }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="title">Duel Links Packs Estimator</div>
+        <div class="subtitle">
+          Here you'll be able to <strong>estimate how many packs you'll need</strong> to open on
+          average to get a list of cards needed to build your brand new deck!
+          <br/><br/>
+          In the menu below, you can choose up to four boxes (main or mini boxes)
+          and for each of them, define <strong>how many of each UR/SR card you want from it.</strong>
+          When you're done designing your amazing deck, just hit "Simulate" to
+          generate the info about <strong>how many packs on average you'll need to open</strong>
+          to get all those pretty cards!
+        </div>
+      </div>
+      <div class="packs-configuration" id="box-list">
+        <div class="row pack-row">
+          <div class="col-lg-3">
+            <div class="pack-config" id="card-box">
+              <div class="pack-header">
+                <div class="pack-title">BOX 1</div>
+                <select class="box-type-selector">
+                  <option selected="selected">MAIN BOX</option>
+                  <option>MINI BOX</option>
+                </select>
+                <i class="material-icons remove-box-button hover-red">delete</i>
+              </div>
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <select class="rarity-select">
+                    <option selected="selected">UR</option>
+                    <option>SR</option>
+                  </select>
+                  <select class="amount-select">
+                    <option>1</option>
+                    <option>2</option>
+                    <option selected="selected">3</option>
+                  </select>
+                </li>
+                <li class="list-group-item">
+                  <select class="rarity-select">
+                    <option selected="selected">UR</option>
+                    <option>SR</option>
+                  </select>
+                  <select class="amount-select">
+                    <option selected="selected">1</option>
+                    <option>2</option>
+                    <option>3</option>
+                  </select>
+                </li>
+                <li class="list-group-item">
+                  <select class="rarity-select">
+                    <option>UR</option>
+                    <option selected="selected">SR</option>
+                  </select>
+                  <select class="amount-select">
+                    <option>1</option>
+                    <option>2</option>
+                    <option selected="selected">3</option>
+                  </select>
+                </li>
+                <li class="list-group-item">
+                  <select class="rarity-select">
+                    <option>UR</option>
+                    <option selected="selected">SR</option>
+                  </select>
+                  <select class="amount-select">
+                    <option>1</option>
+                    <option selected="selected">2</option>
+                    <option>3</option>
+                  </select>
+                </li>
+              </ul>
+              <div class="pack-footer">
+                <div class="pack-footer-buttons">
+                  <i class="material-icons pack-footer-icon hover-green">add</i>
+                  <i class="material-icons pack-footer-icon hover-red">remove</i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="pack-config">
+              <div class="add-pack">
+                <i class="material-icons add-pack-button">add</i>
+                <div class="add-pack-text">ADD NEW BOX</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3"></div>
+          <div class="col-lg-3"></div>
+        </div>
+      </div>
+      <div class="simulation-options">
+        <div class="row">
+          <div class="col-lg-2"></div>
+          <div class="col-lg-8">
+            <div class="simulate-button" id="simulate-button">
+              <div class="simulate-progress"></div>
+              <div class="simulate-text">SIMULATE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="simulation-info">
+        <div class="row no-bottom-margin-row">
+          <div class="col-lg-4">
+            <div class="info-box">
+              <div class="box-title">Average packs needed</div>
+              <div class="box-value blue" id="mean-packs">0.00</div>
+              <div class="box-subinfo">
+                <div class="box-subtitle">Standard deviation:</div>
+                <div class="box-subvalue" id="std-packs">0.00</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="info-box">
+              <div class="box-title">Average gems needed (50/pack)</div>
+              <div class="box-value red" id="mean-gems">0.00</div>
+              <div class="box-subinfo">
+                <div class="box-subtitle">Standard deviation:</div>
+                <div class="box-subvalue" id="std-gems">0.00</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="info-box">
+              <div class="box-title">Total packs simulated</div>
+              <div class="box-value green" id="total-packs">0.00</div>
+              <div class="box-subinfo">
+                <div class="box-subtitle">Simulation time:</div>
+                <div class="box-subvalue" id="time-taken">0.00</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="histogram-graph" id="graph-container">
+          <div class="histogram-title">Cumulative probability of getting all cards by number of opened packs</div>
+          <canvas id="cumulative" height="200"></canvas>
+        </div>
+      </div>
+      <a href="https://github.com/lucaspellegrinelli" target="_blank">
+        <div class="footer">
+          <div class="footer-info">
+            <div class="footer-name">Lucas Pellegrinelli</div>
+            <i class="material-icons footer-icon">emoji_people</i>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+
+    <script src='js/worker-setup.js'></script>
+    <script src='js/graphmaker.js'></script>
+    <script src='js/form.js'></script>
+    <script src='js/main.js'></script>
+    <script src="js/simulator-worker.js"></script>
+  </body>
+</html>
